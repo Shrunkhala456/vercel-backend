@@ -19,7 +19,7 @@ const server = http.createServer(app);
 // Initialize Socket.IO
 const io = new Server(server, {
     cors: {
-        origin: 'http://localhost:3000', // Allow requests from your React app
+        origin: 'https://my-frontend-five-zeta.vercel.app/Login', // http://localhost:3000
         methods: ['GET', 'POST'],
     },
 });
