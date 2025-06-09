@@ -19,7 +19,7 @@ const server = http.createServer(app);
 // Initialize Socket.IO
 const io = new Server(server, {
     cors: {
-        origin: 'https://my-frontend-five-zeta.vercel.app/Login', // http://localhost:3000
+        origin: 'https://my-frontend-five-zeta.vercel.app', // http://localhost:3000
         methods: ['GET', 'POST'],
     },
 });
