@@ -126,24 +126,27 @@ exports.getChatUsers = async (req, res) => {
     }
 };
 
+// ... (other imports and functions)
+
 exports.searchUsers = async (req, res) => {
-    const { query } = req.query;
+    const { query } = req.query; // query can be undefined if not provided
     const userId = req.user.id;
 
-    if (!query) {
-        return res.status(400).json({ message: 'Search query is required' });
-    }
-
     try {
+        let whereCondition = {
+            id: {
+                [Op.ne]: userId // Exclude current user from search results
+            }
+        };
+
+        if (query) {
+            whereCondition.username = {
+                [Op.like]: `%${query}%` // Case-insensitive search
+            };
+        }
+
         const users = await User.findAll({
-            where: {
-                username: {
-                    [Op.like]: `%${query}% `// Case-insensitive search
-                },
-                id: {
-                    [Op.ne]: userId // Exclude current user from search results
-                }
-            },
+            where: whereCondition,
             attributes: ['id', 'username', 'email']
         });
         res.json(users);
