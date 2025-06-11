@@ -1,4 +1,3 @@
-// server/server.js
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
@@ -16,20 +15,26 @@ const messageRoutes = require('./routes/messageRoutes');
 const app = express();
 const server = http.createServer(app);
 
+// Determine CORS origin dynamically for Socket.IO and Express
+const CLIENT_ORIGIN = process.env.NODE_ENV === 'production'
+    ? process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://my-frontend-five-zeta.vercel.app' // Fallback to provided Vercel URL
+    : 'http://localhost:3000'; // For local development
+
 // Initialize Socket.IO
 const io = new Server(server, {
     cors: {
-        origin: 'https://my-frontend-five-zeta.vercel.app', // http://localhost:3000
+        origin: CLIENT_ORIGIN,
         methods: ['GET', 'POST'],
+        credentials: true // Allow cookies/authorization headers
     },
 });
 
 // Middleware
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: CLIENT_ORIGIN, credentials: true })); // Ensure credentials are true for auth headers
 app.use(express.json()); // For parsing JSON request bodies
 app.use(express.urlencoded({ extended: false })); // For parsing URL-encoded request bodies
 
-// Serve static files (uploaded files)
+// Serve static files (uploaded files) - WARNING: Not persistent on Vercel serverless
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // API Routes
@@ -40,17 +45,11 @@ app.use('/api/messages', messageRoutes);
 io.on('connection', (socket) => {
     console.log(`Socket connected: ${socket.id}`);
 
-    // When a user connects, they should join a room identified by their user ID
-    // This allows sending private messages to that user ID's room
     socket.on('joinRoom', (userId) => {
         socket.join(userId);
         console.log(`User ${userId} joined room ${userId}`);
     });
 
-    // Handle incoming messages from clients
-    // This event should ideally be triggered after the message is saved to DB via REST API
-    // We emit it directly here for simplicity, but in a real app,
-    // the 'sendMessage' API endpoint should save the message, then use io.emit to push it.
     socket.on('sendMessage', (messageData) => {
         // In a more robust system, messageData would contain actual message object
         // that was just saved to DB, including sender/receiver info.
@@ -61,7 +60,7 @@ io.on('connection', (socket) => {
         // Emit to the receiver's room
         io.to(messageData.receiver_id).emit('receiveMessage', messageData);
 
-        console.log(`Message from ${messageData.sender_id} to ${messageData.receiver_id}:, messageData.content || messageData.file_name`);
+        console.log(`Message from ${messageData.sender_id} to ${messageData.receiver_id}: ${messageData.content || messageData.file_name}`);
     });
 
     socket.on('disconnect', () => {
@@ -73,13 +72,28 @@ io.on('connection', (socket) => {
 // Database synchronization and server start
 const PORT = process.env.PORT || 5000;
 
-sequelize.sync({ alter: true }) // alter: true will update tables without dropping data (use with caution in production)
-    .then(() => {
-        console.log('Database synced successfully.');
+// Connect to DB and start server
+const startServer = async () => {
+    try {
+        await sequelize.authenticate(); // Test the connection first
+        console.log('Database connection has been established successfully.');
+
+        // Only sync models in development environment
+        if (process.env.NODE_ENV === 'development') {
+            await sequelize.sync({ alter: true });
+            console.log('Database synced successfully in development mode.');
+        } else {
+            console.log('Skipping database sync in production mode.');
+        }
+
         server.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
         });
-    })
-    .catch((err) => {
+    } catch (err) {
         console.error('Unable to connect to the database or sync models:', err);
-    });
+        // In a production app, you might want to exit the process here
+        // process.exit(1);
+    }
+};
+
+startServer();

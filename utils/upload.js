@@ -50,3 +50,15 @@ const upload = multer({
 });
 
 module.exports = upload;
+
+
+// IMPORTANT NOTE FOR DEPLOYMENT:
+// The current file upload setup (multer with diskStorage) will only work reliably in a
+// persistent server environment (like a traditional VM or local development).
+// Vercel serverless functions have an ephemeral filesystem. Any files saved to
+// the '/uploads' directory will be lost after the function invocation finishes
+// or when the function instance is reaped. They also won't be accessible by
+// other function instances.
+// FOR PRODUCTION DEPLOYMENT, you MUST integrate a cloud storage solution
+// (e.g., AWS S3, Google Cloud Storage, Cloudinary, DigitalOcean Spaces, etc.)
+// to store and serve uploaded files persistently.
