@@ -1,0 +1,83 @@
+Imports System.Console
+Module Module1
+
+    Sub Main()
+        Dim us, ps, fn, ln, gn, sec, sem, dp, yr, fee, m, f As String
+        Dim ch, X, ta, tm, tf As Integer
+        Dim ans As Char
+        ans = "y"
+        X = 1
+
+        WriteLine("*********College System**************")
+        WriteLine("------------------")
+        WriteLine("-------Login--------")
+        Write("User Name:")
+        us = ReadLine()
+        Write("Passward:")
+        ps = ReadLine()
+        If (us = "aditi@gmail.com" And ps = "12334") Then
+            System.Console.ForegroundColor = ConsoleColor.Green
+            WriteLine("-------Login success-------")
+            Console.ResetColor()
+        Else
+            System.Console.ForegroundColor = ConsoleColor.Red
+            WriteLine("-------Login invalid-------")
+            Console.ResetColor()
+        End If
+
+        While ans = "y"
+            WriteLine("---------Menus-------")
+            WriteLine("1. Student Admission")
+            WriteLine("2. View Database")
+            WriteLine("3. Logout")
+            Write("Enter a choice:")
+            ch = ReadLine()
+            While X <= 3
+                If ch = 1 Then
+                    WriteLine("ID -BD:" & X)
+                    Write("First Name:")
+                    fn = ReadLine()
+                    Write("Last Name:")
+                    ln = ReadLine()
+                    Write("Gender:")
+                    gn = ReadLine()
+                    Write("Section:")
+                    sec = ReadLine()
+                    Write("Department:")
+                    dp = ReadLine()
+                    Write("Semister:")
+                    sem = ReadLine()
+                    Write("Year:")
+                    yr = ReadLine()
+                    Write("Fees:")
+                    fee = ReadLine()
+                    WriteLine("--------------------")
+                    WriteLine("Admission process Success")
+                    WriteLine("--------------------")
+                    Write("Do you want to continue Admission:")
+                    ans = ReadLine()
+                    X = X + 1
+                    If (gn = m) Then
+                        tm += 1
+                    Else
+                        tf += 1
+                    End If
+
+                ElseIf ch = 2 Then
+                        WriteLine("********Admission Database************")
+                    WriteLine("--------------------")
+
+                    WriteLine("Total Admission:" & X)
+                    WriteLine("Total Male:" & tm)
+                    WriteLine("Total Female:" & tf)
+                    X = X + 1
+                End If
+
+            End While
+            Write("do you want to continue:")
+            ans = ReadLine()
+        End While
+        ReadKey()
+    End Sub
+
+End Module
