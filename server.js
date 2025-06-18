@@ -1137,7 +1137,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "https://my-frontend-git-main-shrunkhala345s-projects.vercel.app/",
+        origin: "https://c9e318a4-5ce9-4189-9b1a-a078cf376a0c.e1-us-east-azure.choreoapps.dev/",
         methods: ["GET", "POST"]
     }
 });
