@@ -1145,7 +1145,7 @@ const io = new Server(server, {
 app.use(cors({ origin: allowedOrigin }));
 
 // Middleware
-app.use(cors());
+
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
