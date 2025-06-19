@@ -1,4 +1,12 @@
 {
+  "name": "your-backend-app",
+  "version": "1.0.0",
+  "description": "Your chat backend",
+  "main": "server.js", 
+  "scripts": {
+    "start": "node server.js", 
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
