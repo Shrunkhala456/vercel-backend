@@ -1135,12 +1135,14 @@ const fs = require('fs');
 
 const app = express();
 const server = http.createServer(app);
+const allowedOrigin = process.env.FRONTEND_URL || "http://localhost:3000"; // Fallback for local dev
 const io = new Server(server, {
     cors: {
-        origin: "https://c9e318a4-5ce9-4189-9b1a-a078cf376a0c.e1-us-east-azure.choreoapps.dev/",
+        origin: allowedOrigin,
         methods: ["GET", "POST"]
     }
 });
+app.use(cors({ origin: allowedOrigin }));
 
 // Middleware
 app.use(cors());
