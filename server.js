@@ -1380,10 +1380,13 @@ io.on('connection', (socket) => {
 });
 
 
-const PORT = process.env.PORT || 5000;
+const port = process.env.PORT || 8080;
 
 
 app.get('/', (req, res) => {
     res.status(200).send('Chat Backend API is running!');
 });
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
