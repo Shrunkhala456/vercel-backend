@@ -1387,4 +1387,4 @@ app.get('/', (req, res) => {
     res.status(200).send('Chat Backend API is running!');
 });
 
- server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+ server.listen(port, () => console.log(`Server running on port ${PORT}`));
