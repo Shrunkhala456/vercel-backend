@@ -1381,7 +1381,9 @@ io.on('connection', (socket) => {
 
 
 const PORT = process.env.PORT || 8080;
-
+app.get('/ping', (req, res) => {
+  res.status(200).send('pong');
+});
 app.get('/', (req, res) => {
     res.status(200).send('Chat Backend API is running!');
 });
