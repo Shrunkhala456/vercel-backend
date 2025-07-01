@@ -1148,7 +1148,13 @@ app.use(cors({ origin: allowedOrigin }));
 
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
+console.log("Connecting to DB with config:", {
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
+});
 // Database Connection Pool
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
